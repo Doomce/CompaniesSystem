@@ -1,0 +1,42 @@
+<ehcache>
+
+    <diskStore path="java.io.tmpdir/comp-cache"/>
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            maxElementsOnDisk="10000000"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU" />
+    <cache name="org.hibernate.cache.QueryCache"
+           maxElementsInMemory="100"
+           eternal="false"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+    />
+    <cache name="org.hibernate.cache.spi.QueryKey"
+           maxElementsInMemory="100"
+           eternal="false"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+    />
+    <cache name="net.dom.companies.database.Company"
+            maxElementsInMemory="200"
+            eternal="false"
+            timeToIdleSeconds="1800"
+            timeToLiveSeconds="3600"
+            memoryStoreEvictionPolicy="LRU">
+    </cache>
+    <cache name="net.dom.companies.database.Employee"
+           maxElementsInMemory="200"
+           eternal="false"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="0"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+
+</ehcache>

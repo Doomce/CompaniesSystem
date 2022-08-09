@@ -1,0 +1,8 @@
+name: Companies
+version: '${project.version}'
+main: net.dom.companies.Companies
+api-version: 1.16
+commands:
+  comp:
+    description: none
+    usage: /<command>

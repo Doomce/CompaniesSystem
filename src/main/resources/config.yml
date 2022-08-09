@@ -1,0 +1,25 @@
+locale: "lt_LT"
+database:
+  #false = use local SQLite database.
+  #true = use local/remote MySQL database.
+  mysql: true
+  # The database address. (Only required if mysql is true)
+  host: localhost
+  # The database port. (Only required if mysql is true)
+  port: 3306
+  # The database names. (Only required if mysql is true)
+  database: test
+  # The database username. (Only required if mysql is true)
+  user: root
+  # The database password. (Only required if mysql is true)
+  password: ''
+  # Should BankSystem use SSL for database connections?  (Only required if mysql is true)
+  ssl: false
+  # Properties for creating connections, you can add your own properties for datasource here. (Both local and remote will be used).
+  properties:
+    connectionTimeout: 60000
+    validationTimeout: 3000
+    idleTimeout: 300000
+    maxLifetime: 600000
+    maximumPoolSize: 8
+    minimumIdle: 2

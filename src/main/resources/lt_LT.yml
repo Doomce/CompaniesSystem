@@ -1,0 +1,55 @@
+#GREEN - <#2b9348>
+#RED - <#dc2f02>
+#YELLOW - <#ffc857>
+menus:
+  actions:
+    confirm: "&l<#2b9348>✔    <#2b9348>Patvirtinimas"
+    reject: ""
+
+  companyPanel:
+    infoItem:
+      name: "<#00afb9>&l<center:50>{name}"
+      lore:
+        - "<$#20b8ee>&l&m                                 <$#dd189d>"
+        - "<center:50>{state}"
+        - "<$#20b8ee>&l&m                                 <$#dd189d>"
+        - "<#00afb9><center:50>Įmonės kodas: {code}"
+      states:
+        worker: "<#00afb9>Jūs esate darbuotojas."
+        check_salary: "<#f4d35e>⚠   Patikrinkite darbuotojų algas"
+        ok: "<#2b9348>&l~     &r<#2b9348>Įmonė veikia sklandžiai!"
+    empItem:
+      name: "  <#84a98c>&lĮMONĖS DARBUOTOJAI"
+      lore:
+        ceo:
+          - "<#52796f>&l&m                          "
+          - "<center:44><#cad2c5>Darbuotojų skaičius: {Total}"
+          - "<center:44><#cad2c5>Iš jų dirbantys: {Working}"
+          - "<#52796f>&l&m                          "
+          - "<#cad2c5> Kairysis pelės klavišas:"
+          - "<#84a98c> ≡   Darbuotojų valdymas"
+          - "<#52796f>&l&m                          "
+        worker:
+          section: "<#354f52>&l&m                          "
+          element: "<center:55><#cad2c5>{Name} {Color} ({State})"
+  workersMenu:
+    name: "<#84A98C>&l<center:63>{Name} {Color}({State})"
+    lore:
+      - "<$#3F8D78>&l&m                                <$#38E5A6>"
+      - " <#cad2c5>➜   Pareigos: {Duties}"
+      - " <#cad2c5>➜   Alga: {Wage}"
+      - " <#cad2c5>➜   Dirba nuo: {Date}"
+      - "<$#3F8D78>&l&m                                <$#38E5A6>"
+    actions:
+      kick:
+        - "<#cad2c5> CTRL + Q:"
+        - "<#dc2f02> &lX   &r<#dc2f02>Darbuotojo išmetimas"
+      wage:
+        - "<#cad2c5> Betkuris pelės klavišas:"
+        - "<#ffc857> &l€   &r<#ffc857>Algos nustatymas"
+      promote:
+        - "<#cad2c5> SHIFT + kairysis pelės klavišas:"
+        - "<#80b918> &l⬆   &r<#80b918>Pareigų paaukštinimas"
+      demote:
+        - "<#cad2c5> SHIFT + dešinysis pelės klavišas:"
+        - "<#f94144> &l⬇   &r<#f94144>Pareigų nužeminimas"
