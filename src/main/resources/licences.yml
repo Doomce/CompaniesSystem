@@ -1,0 +1,61 @@
+001:
+  name: "Statybu leidimas"
+  cost: 23000
+  sellCost: 12000
+  minLevel: 0
+  costInflation: true
+  requirements:
+    - 002
+    - 003
+  description:
+    - ""
+    - ""
+  material: "BRICKS"
+
+002:
+  name: "Automatinis algų pervedimas"
+  cost: 23000
+  sellCost: 12000
+  minLevel: 3
+  costInflation: true
+  requirements: []
+  description:
+    - ""
+    - ""
+  material: "PAPER"
+
+003:
+  name: "ChestShop(R) integracija"
+  cost: 23000
+  sellCost: 12000
+  minLevel: 3
+  costInflation: true
+  requirements: []
+  description:
+    - ""
+    - ""
+  material: "CHEST"
+
+004:
+  name: "Padidintas pelno limitas"
+  cost: 23000
+  sellCost: 12000
+  minLevel: 3
+  costInflation: true
+  requirements: []
+  description:
+    - ""
+    - ""
+  material: "GOLD_INGOT"
+
+005:
+  name: "Paramos gavėjo statusas"
+  cost: 23000
+  sellCost: 12000
+  minLevel: 3
+  costInflation: true
+  requirements: []
+  description:
+    - ""
+    - ""
+  material: "PAPER"

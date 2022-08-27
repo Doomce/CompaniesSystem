@@ -23,6 +23,18 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/*
+Comp State errors for assist:
+Code - Error- problem solving
+
+0 - Salary check - Call wage change prompt;.
+1 - Taxes check - Pay taxes function..
+2 - Payout salary check - Payout salaries function.
+
+
+ */
+
+
 public class CompanyPanelMenu {
 
     private final Player player;

@@ -2,15 +2,10 @@ package net.dom.companies.database;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.google.gson.internal.bind.TypeAdapters;
-import com.google.protobuf.Type;
-import net.dom.companies.functions.licencesManager;
-import org.bukkit.Location;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Converter

@@ -3,10 +3,8 @@ package net.dom.companies.functions;
 import net.dom.companies.Companies;
 import net.dom.companies.Utils.ItemSerialization;
 import net.dom.companies.database.*;
+import net.dom.companies.licences.LicHandler;
 import net.dom.companies.licences.Licence;
-import net.dom.companies.licences.extensionIIIPack;
-import net.dom.companies.licences.extensionIIPack;
-import net.dom.companies.licences.extensionIPack;
 import net.dom.companies.menus.compEmpsMenu;
 import net.dom.companies.menus.compLicMenu;
 import net.dom.companies.menus.CompanyPanelMenu;
@@ -85,35 +83,23 @@ public class companyManager {
             Session session = hibernateUtil.getSessionFactory().openSession();
             Company company = session.get(Company.class, compId);
 
-            compLicMenu gui = new compLicMenu(p, compId, comp.getFuncMng().licMng.setupCompLicences(company));
+            compLicMenu gui = new compLicMenu(p, compId, comp.getFuncMng().getLicHandler().manageLicencesForComp(company));
             Bukkit.getScheduler().runTask(comp, gui::open);
 
             session.close();
         });
     }
 
-    public static void licAction(Player p, Long compId, int licId, boolean isHaving) {
-        if (isHaving) {
-            comp.getFuncMng().licMng.sellLic(p, licId, compId);
+    public static void licAction(Player p, Long compId, Licence.Properties licProperty) {
+        if (licProperty.isOwned) {
+            comp.getFuncMng().getLicHandler().sellLic(p, compId, licProperty.id);
             return;
         }
-        comp.getFuncMng().licMng.purchaseLic(p, licId, compId);
+        comp.getFuncMng().getLicHandler().purchaseLic(p, compId, licProperty.id);
     }
 
     static int getMaxWorkers(Company company) {
         int workers = company.getBusinessForm().getClassByName().getMaxWorkers();
-        for (Licence lic : comp.getFuncMng().licMng.setupCompLicences(company)) {
-            if (!lic.isOwned()) continue;
-            if (lic instanceof extensionIPack) {
-                workers += ((extensionIPack) lic).getExtendCoefficient();
-            }
-            if (lic instanceof extensionIIPack) {
-                workers += ((extensionIIPack) lic).getExtendCoefficient();
-            }
-            if (lic instanceof extensionIIIPack) {
-                workers += ((extensionIIIPack) lic).getExtendCoefficient();
-            }
-        }
         return workers;
     }
 

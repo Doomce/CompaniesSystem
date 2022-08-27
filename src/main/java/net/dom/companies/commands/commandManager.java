@@ -29,7 +29,7 @@ implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("create")) {
                     if (sender instanceof Player) {
                         Player p = (Player) sender;
-                        //compCreateMenu.gui(p, null);
+                        new compCreateMenu(p, null).open();
                         return false;
                     }
                     return false;

@@ -25,7 +25,6 @@ public class databaseOperations {
 
 
     public void createCompany(UUID uuid, Map<Object, Object> data) {
-        int scope = (int) data.get("scope");
         int form = (int) data.get("form");
         double init = (double) data.get("init");
         String name = (String) data.get("name");
