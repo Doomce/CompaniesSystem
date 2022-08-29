@@ -6,6 +6,13 @@ menus:
     confirm: "&l<#2b9348>✔    <#2b9348>Patvirtinimas"
     reject: ""
 
+  compMngAssist:
+    states:
+      worker: "<#00afb9>Jūs esate darbuotojas."
+      check_salary: "<#f4d35e>⚠   Patikrinkite darbuotojų algas"
+      ok: "<#2b9348>&l~     &r<#2b9348>Įmonė veikia sklandžiai!"
+      noTag: "<#f4d35e>⚠   Nenustatytas tag'as"
+
   companyPanel:
     infoItem:
       name: "<#00afb9>&l<center:50>{name}"
@@ -14,10 +21,6 @@ menus:
         - "<center:50>{state}"
         - "<$#20b8ee>&l&m                                 <$#dd189d>"
         - "<#00afb9><center:50>Įmonės kodas: {code}"
-      states:
-        worker: "<#00afb9>Jūs esate darbuotojas."
-        check_salary: "<#f4d35e>⚠   Patikrinkite darbuotojų algas"
-        ok: "<#2b9348>&l~     &r<#2b9348>Įmonė veikia sklandžiai!"
     empItem:
       name: "  <#84a98c>&lĮMONĖS DARBUOTOJAI"
       lore:

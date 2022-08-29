@@ -1,12 +1,14 @@
 package net.dom.companies.prompts;
 
 import net.dom.companies.Companies;
+import org.bukkit.Bukkit;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;
 import org.bukkit.conversations.Prompt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class EmpSalaryPrompt extends NumericPrompt {
@@ -26,7 +28,10 @@ public class EmpSalaryPrompt extends NumericPrompt {
     @NotNull
     @Override
     public String getPromptText(@NotNull ConversationContext context) {
-        return "Įvesk darbuotojui skiriamą algą. Minimali dienos alga: 300e. \n" +
+        String empName = Objects.requireNonNullElse(
+                        Bukkit.getPlayer((UUID) context.getSessionData("empUid")).getName(),
+                        "darbuotojui");
+        return "Įvesk "+empName+" skiriamą algą. Minimali dienos alga: 300e. \n" +
                 "Jei darbuotojas nedirba, įvesk 0.";
     }
 }

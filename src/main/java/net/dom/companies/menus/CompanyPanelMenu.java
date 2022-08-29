@@ -7,6 +7,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import net.dom.companies.Companies;
 import net.dom.companies.database.CompaniesEmployees;
 import net.dom.companies.database.Company;
+import net.dom.companies.functions.compManagementAssist;
 import net.dom.companies.functions.companyManager;
 import net.dom.companies.lang.Language;
 import net.dom.companies.objects.duty;
@@ -42,6 +43,8 @@ public class CompanyPanelMenu {
     private final long compId;
     private final CompaniesEmployees employee;
 
+    protected compManagementAssist assist;
+
     private final Language lang;
 
     private Gui gui;
@@ -58,6 +61,7 @@ public class CompanyPanelMenu {
         this.comp = var2;
         this.compId = var2.getCompId();
         this.employee = var3;
+        this.assist = new compManagementAssist(var2, var3);
 
         this.lang = Companies.getInstance().getLang();
     }
@@ -66,7 +70,7 @@ public class CompanyPanelMenu {
         gui.setItem(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8 , 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
                 ItemBuilder.from(Material.BLACK_STAINED_GLASS_PANE).name(Component.text("")).asGuiItem());
 
-        gui.setItem(2, 2, new GuiItem(setupInfoItem()));
+        gui.setItem(2, 2, new GuiItem(setupInfoItem(), event -> assist.action(player)));
         gui.setItem(2, 4, new GuiItem(setupEmpItem(), (event -> {
             companyManager.openCompanyEmpPanel(player, compId);
         })));
@@ -121,22 +125,6 @@ public class CompanyPanelMenu {
         gui.open(player);
     }
 
-    private String getCompanyState() {
-        if (employee.getDuties().equals(duty.WORKER)) {
-            return Language.get("menus.companyPanel.infoItem.states.worker");
-        }
-        //TODO tikrinti banko balansa.
-        //TODO Mokesciai
-        //TODO Algos
-        for (CompaniesEmployees employee : comp.getCE()) {
-            if (employee.getSalary() == null || employee.getSalary() < 300) {
-                return Language.get("menus.companyPanel.infoItem.states.check_salary");
-            }
-        }
-
-        return Language.get("menus.companyPanel.infoItem.states.ok");
-    }
-
     private ItemStack setupInfoItem() {
         ItemStack infoItem = new ItemStack(Material.PAPER);
         ItemMeta iMeta = infoItem.getItemMeta();
@@ -145,7 +133,7 @@ public class CompanyPanelMenu {
         iMeta.setDisplayName(Language.get("menus.companyPanel.infoItem.name", "{name}",
                 comp.getBusinessForm().toString() + " " + comp.getName()));
         lore.addAll(Language.getList("menus.companyPanel.infoItem.lore",
-                "{state}", getCompanyState(), "{code}", comp.getCompId()+""));
+                "{state}", assist.getMessage(), "{code}", comp.getCompId()+""));
 
         iMeta.setLore(lore);
         infoItem.setItemMeta(iMeta);
