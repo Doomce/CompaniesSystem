@@ -8,6 +8,7 @@ import net.dom.companies.Companies;
 import net.dom.companies.database.CompaniesEmployees;
 import net.dom.companies.functions.companyManager;
 import net.dom.companies.functions.employeeManager;
+import net.dom.companies.functions.menuFunctions;
 import net.dom.companies.lang.Language;
 import net.dom.companies.objects.duty;
 import net.kyori.adventure.text.Component;
@@ -52,28 +53,28 @@ public class compEmpsMenu {
         gui.setItem(31,
             ItemBuilder.from(Material.PAPER)
                     .name(Component.text("Priimti naują darbuotoją").decorate(TextDecoration.BOLD))
-                .asGuiItem(event -> employeeManager.invitationPrompt(p, compId)));
+                .asGuiItem(event -> menuFunctions.invitationPrompt(p, compId)));
 
         gui.setItem(35, new GuiItem(ItemBuilder.from(Material.CLOCK)
                 .name(Component.text("<- Atgal").decorate(TextDecoration.BOLD).color(TextColor.fromHexString("#138D75")))
-                .build(), (event -> companyManager.openCompanyPanel(p, compId))));
+                .build(), (event -> menuFunctions.openCompanyMenu(p, compId))));
         
         for (CompaniesEmployees compEmp : employees) {
             gui.addItem(new GuiItem(EmpItem(compEmp), event -> {
                 if (event.getAction().equals(InventoryAction.DROP_ALL_SLOT)) {
-                    Companies.getInstance().getEmpMng().kick(p, compId, compEmp.getId().getEmployeeId(), false);
+                    menuFunctions.empAction(1, p, compId, compEmp);
                     return;
                 }
                 if (!event.isShiftClick()) {
-                    employeeManager.wagePrompt(p, compEmp);
+                    menuFunctions.empAction(4, p, compId, compEmp);
                     return;
                 }
                 if (event.isRightClick()) {
-                    Companies.getInstance().getEmpMng().demote(p, compId, compEmp, false);
+                    menuFunctions.empAction(3, p, compId, compEmp);
                     return;
                 }
                 if (event.isLeftClick()) {
-                    Companies.getInstance().getEmpMng().promote(p, compId, compEmp, false);
+                    menuFunctions.empAction(2, p, compId, compEmp);
                 }
             }));
         }

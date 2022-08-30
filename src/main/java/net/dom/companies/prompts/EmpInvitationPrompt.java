@@ -27,7 +27,7 @@ public class EmpInvitationPrompt extends PlayerNamePrompt {
     @Override
     protected Prompt acceptValidatedInput(@NotNull ConversationContext context, @NotNull Player input) {
         long compId = (Long) context.getSessionData("compId");
-        plugin.getEmpMng().invite((Player) context.getForWhom(), input, compId);
+        plugin.getFH().getEmpMng().invite((Player) context.getForWhom(), input, compId);
         return Prompt.END_OF_CONVERSATION;
     }
 

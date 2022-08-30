@@ -7,7 +7,8 @@ public enum duty {
     OWNER (List.of(true, true, true, true, true, true, true, true, true, true)),
     CO_OWNER (List.of(true, true, false, true, false, true, false, true, false, false)),
     MANAGER (List.of(false, false, false, true, false, true, false, false, false, false)),
-    WORKER (List.of(false, false, false, true, false, true, false, false, false, false));
+    WORKER (List.of(false, false, false, true, false, true, false, false, false, false)),
+    NONE (null);
 
     private final List<Boolean> permissions;
 

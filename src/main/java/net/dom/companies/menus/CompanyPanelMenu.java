@@ -8,7 +8,7 @@ import net.dom.companies.Companies;
 import net.dom.companies.database.CompaniesEmployees;
 import net.dom.companies.database.Company;
 import net.dom.companies.functions.compManagementAssist;
-import net.dom.companies.functions.companyManager;
+import net.dom.companies.functions.menuFunctions;
 import net.dom.companies.lang.Language;
 import net.dom.companies.objects.duty;
 import net.kyori.adventure.text.Component;
@@ -45,8 +45,6 @@ public class CompanyPanelMenu {
 
     protected compManagementAssist assist;
 
-    private final Language lang;
-
     private Gui gui;
 
 
@@ -62,8 +60,6 @@ public class CompanyPanelMenu {
         this.compId = var2.getCompId();
         this.employee = var3;
         this.assist = new compManagementAssist(var2, var3);
-
-        this.lang = Companies.getInstance().getLang();
     }
 
     private void cSetup() {
@@ -73,14 +69,14 @@ public class CompanyPanelMenu {
         gui.setItem(2, 2, new GuiItem(setupInfoItem(), event -> assist.action(player)));
         gui.setItem(2, 4, new GuiItem(setupEmpItem(), (event -> {
             if (!employee.getDuties().getPermission(3)) return;
-            companyManager.openCompanyEmpPanel(player, compId);
+            menuFunctions.openCompanyEmpMenu(player, compId);
         })));
         gui.setItem(2, 6, new GuiItem(setupVaultItem(), (event -> {
             //TODO BANKAS;
         })));
         gui.setItem(2, 8, new GuiItem(setupLicItem(), (event -> {
             if (!employee.getDuties().getPermission(5)) return;
-            companyManager.openLicGui(player, compId);
+            menuFunctions.openLicMenu(player, compId);
         })));
         gui.setItem(3, 2, new GuiItem(setupWageItem(), (event -> {
             //TODO PAYOUT SALARY BUTTONS
@@ -133,7 +129,7 @@ public class CompanyPanelMenu {
         List<String> lore = new ArrayList<>();
 
         iMeta.setDisplayName(Language.get("menus.companyPanel.infoItem.name", "{name}",
-                comp.getBusinessForm().toString() + " " + comp.getName()));
+                "UAB " + comp.getName()));
         lore.addAll(Language.getList("menus.companyPanel.infoItem.lore",
                 "{state}", assist.getMessage(), "{code}", comp.getCompId()+""));
 

@@ -4,7 +4,7 @@ import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.dom.companies.Companies;
-import net.dom.companies.provisions.businessForms;
+import net.dom.companies.economy.Eco;
 import net.dom.companies.prompts.accCreateContributionPrompt;
 import net.dom.companies.prompts.accCreateNamePrompt;
 import net.kyori.adventure.text.Component;
@@ -53,7 +53,7 @@ public class compCreateMenu {
 
 
         gui.addItem(new GuiItem(Material.AIR));
-        gui.addItem(new GuiItem(formItem((int) data.get("form")), (event -> {
+        /*gui.addItem(new GuiItem(formItem((int) data.get("form")), (event -> {
             if (!changeable) return;
             int selection = businessForms.valueOf(ChatColor.stripColor(event.getCurrentItem().getItemMeta()
                     .getDisplayName()).replaceAll("Verslo valdymo forma: ", "")).ordinal();
@@ -81,7 +81,7 @@ public class compCreateMenu {
             data.replace("form", selection);
             gui.updateItem(7, commitItem(data));
             gui.update();
-        })));
+        })));*/
         gui.addItem(new GuiItem(Material.AIR));
         gui.addItem(new GuiItem(contributionItem((int) data.get("form"), (Double) data.get("init")), (event -> {
             gui.close(p);
@@ -112,17 +112,8 @@ public class compCreateMenu {
         lore.add(ChatColor.GRAY+"- Uždaroji akcinė bendrovė");
         lore.set(selected, ChatColor.YELLOW+ChatColor.stripColor(lore.get(selected)));
 
-        businessForms bf = businessForms.values()[selected];
-        lore.add("");
-        lore.add(ChatColor.GRAY+"Max Darb: "+bf.getClassByName().getMaxWorkers());
-        lore.add(ChatColor.GRAY+"Max Profit: "+bf.getClassByName().maxProfit());
-        lore.add(ChatColor.GRAY+"Istatas: "+bf.getClassByName().initContribution());
-        lore.add(ChatColor.GRAY+"Max Lic: "+bf.getClassByName().licCount());
-        lore.add(ChatColor.GRAY+"Max Kontraktu: "+bf.getClassByName().maxInProgressContracts());
-        lore.add("");
-
         ItemMeta iMeta = item.getItemMeta();
-        iMeta.setDisplayName(ChatColor.YELLOW+"Verslo valdymo forma: "+bf);
+        iMeta.setDisplayName(ChatColor.YELLOW+"Verslo valdymo forma: UAB");
         iMeta.setLore(lore);
         item.setItemMeta(iMeta);
         return item;
@@ -132,9 +123,8 @@ public class compCreateMenu {
         ItemStack item = new ItemStack(Material.BRICK);
         List<String> lore = new ArrayList<>();
 
-        businessForms bf = businessForms.values()[selected];
         lore.add(ChatColor.GRAY+"Jūsų įnešama suma: "+amount);
-        lore.add(ChatColor.GRAY+"Minimali suma: "+bf.getClassByName().initContribution());
+        lore.add(ChatColor.GRAY+"Minimali suma: "+ Eco.INIT_CONTRIBUTION.cost());
 
         ItemMeta iMeta = item.getItemMeta();
         iMeta.setDisplayName(ChatColor.YELLOW+"ĮSTATINIS  KAPITALAS");
@@ -161,19 +151,17 @@ public class compCreateMenu {
     }
 
     private static ItemStack commitItem(Map<Object, Object> data) {
-        int form = (int) data.get("form");
         double init = (double) data.get("init");
         String name = (String) data.get("name");
-        double minInit = businessForms.values()[form].getClassByName().initContribution();
 
         ItemStack item = new ItemStack(Material.BRICK);
         List<String> lore = new ArrayList<>();
         if (name == null) {
             lore.add(ChatColor.GRAY+"X Nera pavadinimo");
         } else {
-            lore.add(ChatColor.GRAY + "Pavadinimas: " +businessForms.values()[form].name()+" "+ name);
+            lore.add(ChatColor.GRAY + "Pavadinimas: UAB " + name);
         }
-        if (init<minInit) {
+        if (init<Eco.INIT_CONTRIBUTION.cost()) {
             lore.add(ChatColor.GRAY+"X per mazas istatas.");
         } else {
             lore.add(ChatColor.GRAY+"Inasas: "+init+".");

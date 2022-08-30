@@ -7,7 +7,6 @@ import net.dom.companies.database.Company;
 import net.dom.companies.database.Employee;
 import net.dom.companies.menus.compListMenu;
 import net.dom.companies.objects.duty;
-import net.dom.companies.provisions.businessForms;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.hibernate.Session;
@@ -48,9 +47,7 @@ public class list {
                 for (CompaniesEmployees compEmp : emp.getCE()) {
                     compList.add(compEmp.getCompany());
                     empDuties.add(compEmp.getDuties());
-                    if (compEmp.getCompany().getBusinessForm().equals(businessForms.IV)) allowCreate = false;
                 }
-                //TODO NEPAMIRSTI PRIE KOMPANIJOS IKURIMO CHECK: JEI TURI IV, Kompaniju kurti nebegali.
 
             }
 

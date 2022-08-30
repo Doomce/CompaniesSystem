@@ -1,6 +1,5 @@
 package net.dom.companies.database;
 
-import net.dom.companies.provisions.businessForms;
 import net.dom.companies.objects.duty;
 import org.bukkit.Location;
 import org.hibernate.annotations.Cache;
@@ -50,10 +49,6 @@ public class Company implements Serializable {
 
     @Column(name = "bank_iban")
     Long bankIban;
-
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "form")
-    businessForms bf;
 
     @Column(name = "init_contribution", precision = 10, scale = 2)
     Double initContribution;
@@ -139,14 +134,6 @@ public class Company implements Serializable {
 
     public Double getInitContribution() {
         return initContribution;
-    }
-
-    public businessForms getBusinessForm() {
-        return bf;
-    }
-
-    public void setBusinessForm(businessForms bf) {
-        this.bf = bf;
     }
 
     public List<Integer> getLicences() {

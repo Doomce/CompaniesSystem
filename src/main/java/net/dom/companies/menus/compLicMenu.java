@@ -5,6 +5,7 @@ import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import net.dom.companies.functions.companyManager;
+import net.dom.companies.functions.menuFunctions;
 import net.dom.companies.licences.LicHandler;
 import net.dom.companies.licences.Licence;
 import net.kyori.adventure.text.Component;
@@ -42,7 +43,7 @@ public class compLicMenu {
 
             gui.addItem(new GuiItem(licProperty.lic.getItemStack(licProperty.isOwned), (event) -> {
                 if (!event.isShiftClick()) return;
-                companyManager.licAction(var1, var2, licProperty);
+                menuFunctions.licAction(var1, var2, licProperty);
             }));
 
         });
@@ -51,7 +52,7 @@ public class compLicMenu {
 
         gui.setItem(3, 9, new GuiItem(ItemBuilder.from(Material.CLOCK)
             .name(Component.text("<- Atgal").decorate(TextDecoration.BOLD).color(TextColor.fromHexString("#138D75")))
-            .build(), (event -> companyManager.openCompanyPanel(player, var2))));
+            .build(), (event -> menuFunctions.openCompanyMenu(player, var2))));
     }
 
     public void open() {

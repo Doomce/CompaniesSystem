@@ -2,7 +2,7 @@ package net.dom.companies;
 
 import net.dom.companies.commands.commandManager;
 import net.dom.companies.database.databaseOperations;
-import net.dom.companies.functions.employeeManager;
+import net.dom.companies.functions.companyManager;
 import net.dom.companies.functions.functionsHandler;
 import net.dom.companies.lang.Language;
 import net.milkbowl.vault.economy.Economy;
@@ -21,7 +21,7 @@ public final class Companies extends JavaPlugin {
     public Economy eco;
 
     private databaseOperations dbOps;
-    private functionsHandler fMng;
+    private functionsHandler fH;
     private Language lang;
 
 
@@ -36,7 +36,7 @@ public final class Companies extends JavaPlugin {
         commandManager cmdMng = new commandManager(this);
         this.getCommand("comp").setExecutor(cmdMng);
 
-        fMng = new functionsHandler(this);
+        fH = new functionsHandler(this);
         lang = new Language(this);
     }
 
@@ -73,12 +73,12 @@ public final class Companies extends JavaPlugin {
         return dbOps;
     }
 
-    public functionsHandler getFuncMng() {
-        return fMng;
+    public functionsHandler getFH() {
+        return fH;
     }
 
-    public employeeManager getEmpMng() {
-        return fMng.getEmpMng();
+    public companyManager compMng() {
+        return fH.compMng;
     }
 
     public Language getLang() {

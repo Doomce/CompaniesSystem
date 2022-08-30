@@ -3,7 +3,6 @@ package net.dom.companies.commands;
 import net.dom.companies.Companies;
 import net.dom.companies.database.Company;
 import net.dom.companies.database.hibernateUtil;
-import net.dom.companies.functions.companyManager;
 import net.dom.companies.menus.compCreateMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -13,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.hibernate.Session;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 
 public class commandManager
 implements CommandExecutor {
@@ -36,14 +34,14 @@ implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("accept")) {
                     if (sender instanceof Player) {
                         Player p = (Player) sender;
-                        comp.getEmpMng().acceptInvitation(p);
+                        comp.getFH().getEmpMng().acceptInvitation(p);
                         return false;
                     }
                     return false;
                 } else if (args[0].equalsIgnoreCase("reject")) {
                     if (sender instanceof Player) {
                         Player p = (Player) sender;
-                        comp.getEmpMng().rejectInvitation(p);
+                        comp.getFH().getEmpMng().rejectInvitation(p);
                         return false;
                     }
                     return false;
@@ -61,11 +59,7 @@ implements CommandExecutor {
 
                         sender.sendMessage("Informacija: [ID:"+comp.getCompId()+"] [Pav:"+comp.getName()+"]");
                         sender.sendMessage("--- Fondas: "+comp.getBankIban()+"; Jei NULL- Nėra;");
-                        sender.sendMessage("--- Forma: ");
-                        sender.sendMessage("    --> Daugiausia darb.: "+comp.getBusinessForm().getClassByName().getMaxWorkers());
-                        sender.sendMessage("    --> Max kontraktų: "+comp.getBusinessForm().getClassByName().maxInProgressContracts());
-                        sender.sendMessage("    --> Daugiausia lic.: "+comp.getBusinessForm().getClassByName().licCount());
-                        sender.sendMessage("    --> Minimalus inašas: "+comp.getBusinessForm().getClassByName().initContribution());
+                        sender.sendMessage("--- Forma: UAB");
                         sender.sendMessage("--- Įkurta: "+comp.getCreationDate());
                         sender.sendMessage("--- Darb skaičius: "+comp.getCE().size());
                         comp.getCE().forEach((employees -> {
@@ -91,7 +85,7 @@ implements CommandExecutor {
                 if (sender instanceof Player) {
                     Player p = (Player)sender;
 
-                    comp.getFuncMng().getCList().runPlayer(p);
+                    comp.getFH().getCList().runPlayer(p);
 
                     /*Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
                         Session session  = hibernateUtil.getSessionFactory().openSession();

@@ -6,6 +6,7 @@ import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.dom.companies.database.Company;
 import net.dom.companies.functions.companyManager;
+import net.dom.companies.functions.menuFunctions;
 import net.dom.companies.objects.duty;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -35,7 +36,7 @@ public class compListMenu {
         for (int i = 0; i < companies.size(); i++) {
             Company comp = companies.get(i);
             gui.addItem(new GuiItem(compItem(comp, duties.get(i)),
-                    (event -> companyManager.openCompanyPanel(p, comp.getCompId()))));
+                    (event -> menuFunctions.openCompanyMenu(p, comp.getCompId()))));
         }
 
         gui.setItem(3, 2, ItemBuilder.from(Material.PAPER)

@@ -4,7 +4,6 @@ import net.dom.companies.Companies;
 import net.dom.companies.database.*;
 import net.dom.companies.economy.Eco;
 import net.dom.companies.objects.duty;
-import net.dom.companies.prompts.EmpInvitationPrompt;
 import net.dom.companies.prompts.EmpSalaryPrompt;
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.*;
@@ -14,6 +13,7 @@ import org.hibernate.Transaction;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class employeeManager {
 
@@ -28,10 +28,10 @@ public class employeeManager {
         }
     }
 
-    private static Companies comp;
+    private final Companies plugin;
 
     public employeeManager(Companies plugin) {
-        comp = plugin;
+        this.plugin = plugin;
     }
 
     private final int verificationTimes = 3;
@@ -53,16 +53,14 @@ public class employeeManager {
             verifications.get(p).times++;
         } else {
             verifications.put(p, new Verification(uid, action));
-            Bukkit.getScheduler().runTaskLaterAsynchronously(comp, () -> {
-                verifications.remove(p);
-            }, 15*20);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> verifications.remove(p), 15*20);
         }
         return false;
     }
 
     public void promote(Player p, Long compId, CompaniesEmployees employee, boolean isAdmin) {
         if (!p.hasPermission("companies.promote")) return;
-        Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Session session = hibernateUtil.getSessionFactory().openSession();
             Transaction tx = session.beginTransaction();
             Company comp = session.get(Company.class, compId);
@@ -108,13 +106,13 @@ public class employeeManager {
 
             tx.commit();
             session.close();
-            companyManager.openCompanyEmpPanel(p, compId);
+            menuFunctions.openCompanyEmpMenu(p, compId);
         });
     }
 
     public void demote(Player p, Long compId, CompaniesEmployees employee, boolean isAdmin) {
         if (!p.hasPermission("companies.demote")) return;
-        Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Session session = hibernateUtil.getSessionFactory().openSession();
             Transaction tx = session.beginTransaction();
             Company comp = session.get(Company.class, compId);
@@ -146,13 +144,13 @@ public class employeeManager {
 
             tx.commit();
             session.close();
-            companyManager.openCompanyEmpPanel(p, compId);
+            menuFunctions.openCompanyEmpMenu(p, compId);
         });
     }
 
     public void kick(Player p, Long compId, UUID empUid, boolean isAdmin) {
         if (!p.hasPermission("companies.kick")) return;
-        Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Session session = hibernateUtil.getSessionFactory().openSession();
             CompaniesEmployees employee =
                     session.load(CompaniesEmployees.class, new CompaniesEmployeesKeys(empUid, compId));
@@ -178,13 +176,13 @@ public class employeeManager {
             tx.commit();
             p.sendMessage(Bukkit.getPlayer(employee.getEmployee().getUuid()).getName()+" pasalintas is kompanijos.");
             session.close();
-            companyManager.openCompanyEmpPanel(p, compId);
+            menuFunctions.openCompanyEmpMenu(p, compId);
         });
     }
 
     public void quit(Player p, Long compId) {
         if (!p.hasPermission("companies.quit")) return;
-        Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Session session = hibernateUtil.getSessionFactory().openSession();
             CompaniesEmployees compEmp =
                     session.load(CompaniesEmployees.class, new CompaniesEmployeesKeys(p.getUniqueId(), compId));
@@ -204,7 +202,7 @@ public class employeeManager {
     public void invite(Player p, Player target, Long compId) {
         if (target == null || (!target.isOnline())) return;
         if (p.getName().equals(target.getName())) return;
-        Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 
             Session session = hibernateUtil.getSessionFactory().openSession();
             Company company = session.load(Company.class, compId);
@@ -244,7 +242,7 @@ public class employeeManager {
         if ((Eco.MIN_WAGE.cost()>wage && wage != 0) && !isAdmin) {
             return;
         }
-        Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Session session = hibernateUtil.getSessionFactory().openSession();
 
             CompaniesEmployees compStaff =
@@ -287,11 +285,11 @@ public class employeeManager {
             p.sendMessage("neturi galiojančių kvietimų.");
             return;
         }
-        Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Session session = hibernateUtil.getSessionFactory().openSession();
             Company company = session.load(Company.class, invitations.get(p.getUniqueId()));
             if (company == null) return;
-            if (company.getCE().size()+1 > companyManager.getMaxWorkers(company)) {
+            if (company.getCE().size()+1 > plugin.compMng().getMaxWorkers()) {
                 p.sendMessage("Nepriimtas, nes viršijamas darbuotojų limitas.");
                 return;
             }
@@ -310,7 +308,7 @@ public class employeeManager {
 
             company.getCE().add(CE);
             tx.commit();
-            p.sendMessage("Įsidarbinai į "+company.getBusinessForm().name()+" "+company.getName()+"!");
+            p.sendMessage("Įsidarbinai į UAB "+company.getName()+"!");
             session.close();
             invitations.remove(p.getUniqueId());
         });
@@ -331,20 +329,7 @@ public class employeeManager {
                 .orElse(null);
     }
 
-    public static void invitationPrompt(Player p, Long compId) {
-        if (!p.hasPermission("companies.invite")) return;
-        p.closeInventory();
-
-        HashMap<Object, Object> data = new HashMap<>();
-        data.put("compId", compId);
-
-        ConversationFactory factory = new ConversationFactory(comp);
-        factory.withFirstPrompt(new EmpInvitationPrompt(comp)).withTimeout(25)
-                .withEscapeSequence("atsaukti").withEscapeSequence("atšaukti").withInitialSessionData(data)
-                .withLocalEcho(false).buildConversation(p).begin();
-    }
-
-    public static void wagePrompt(Player p, CompaniesEmployees compEmp) {
+    void wagePrompt(Player p, CompaniesEmployees compEmp) {
         if (!p.hasPermission("companies.wage.change")) return;
         p.closeInventory();
 
@@ -352,11 +337,28 @@ public class employeeManager {
         data.put("empUid", compEmp.getId().getEmployeeId());
         data.put("compId", compEmp.getId().getCompanyId());
 
-        ConversationFactory factory = new ConversationFactory(comp);
+        ConversationFactory factory = new ConversationFactory(plugin);
         factory.withFirstPrompt(new EmpSalaryPrompt()).withTimeout(25)
                 .withEscapeSequence("atsaukti").withEscapeSequence("atšaukti")
                 .withInitialSessionData(data)
                 .withLocalEcho(false).buildConversation(p).begin();
+    }
+
+    public static List<CompaniesEmployees> getCompanyTeam(Long compId) {
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        Company company = session.get(Company.class, compId);
+        List<CompaniesEmployees> employees = new ArrayList<>(company.getCE());
+        employees.sort(Comparator.comparingInt((CE) -> CE.getDuties().ordinal()));
+        session.close();
+        return employees;
+    }
+
+    public static List<CompaniesEmployees> getCompanyShareholders(Long compId) {
+        return getCompanyTeam(compId).stream().filter(CompaniesEmployees::isShareholder).collect(Collectors.toList());
+    }
+
+    public static List<CompaniesEmployees> getCompanyEmployees(Long compId) {
+        return getCompanyTeam(compId).stream().filter((CE) -> !CE.getDuties().equals(duty.NONE)).collect(Collectors.toList());
     }
 
 }

@@ -17,11 +17,11 @@ public class EmpSalaryPrompt extends NumericPrompt {
     @Nullable
     @Override
     protected Prompt acceptValidatedInput(@NotNull ConversationContext context, @NotNull Number input) {
-        Companies comp = (Companies) context.getPlugin();
+        Companies plugin = (Companies) context.getPlugin();
         UUID uid = (UUID) context.getSessionData("empUid");
         long compId = (Long) context.getSessionData("compId");
 
-        comp.getEmpMng().changeWage(context.getForWhom(), uid, compId, input.doubleValue(), false);
+        plugin.getFH().getEmpMng().changeWage(context.getForWhom(), uid, compId, input.doubleValue(), false);
 
         return Prompt.END_OF_CONVERSATION;
     }

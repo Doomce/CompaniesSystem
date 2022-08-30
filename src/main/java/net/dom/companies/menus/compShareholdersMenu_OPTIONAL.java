@@ -2,7 +2,6 @@ package net.dom.companies.menus;
 
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
-import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
 import net.dom.companies.Companies;
 import net.dom.companies.database.CompaniesEmployees;
@@ -11,7 +10,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -50,7 +48,7 @@ public class compShareholdersMenu_OPTIONAL {
                 .build(), (event -> companyManager.openCompanyPanel(p, compId))));
 
                 TODO: IDEA- AKCININKU BUTTONAI.
-         */
+
         
         for (CompaniesEmployees compEmp : employees) {
             gui.addItem(new GuiItem(EmpItem(compEmp), event -> {
@@ -68,6 +66,8 @@ public class compShareholdersMenu_OPTIONAL {
                 }
             }));
         }
+
+         */
 
         Bukkit.getScheduler().runTask(Companies.getInstance(), () -> gui.open(p));
     }

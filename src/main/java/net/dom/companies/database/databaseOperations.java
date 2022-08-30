@@ -1,7 +1,7 @@
 package net.dom.companies.database;
 
 import net.dom.companies.Companies;
-import net.dom.companies.provisions.businessForms;
+import net.dom.companies.economy.Eco;
 import net.dom.companies.objects.duty;
 import org.bukkit.Bukkit;
 import org.hibernate.Session;
@@ -25,12 +25,10 @@ public class databaseOperations {
 
 
     public void createCompany(UUID uuid, Map<Object, Object> data) {
-        int form = (int) data.get("form");
         double init = (double) data.get("init");
         String name = (String) data.get("name");
-        businessForms bf = businessForms.values()[form];
 
-        if (init < bf.getClassByName().initContribution()) return;
+        if (init < Eco.INIT_CONTRIBUTION.cost()) return;
         if (name == null || name.isEmpty()) return;
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
@@ -40,7 +38,6 @@ public class databaseOperations {
             Company comp = new Company();
 
             comp.setName(name);
-            comp.setBusinessForm(bf);
             comp.setInitContribution(init);
 
             session.save(comp);

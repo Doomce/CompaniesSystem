@@ -31,14 +31,14 @@ public class compManagementAssist {
     private final Pair solution;
 
     public void action(Player p) {
-        Companies plugin = functionsHandler.comp;
+        Companies plugin = functionsHandler.plugin;
         switch (solution.code) {
             case 0: {
                 break;
             }
             case 1: {
                 CompaniesEmployees emp = (CompaniesEmployees) solution.value;
-                employeeManager.wagePrompt(p, emp);
+                plugin.getFH().getEmpMng().wagePrompt(p, emp);
                 break;
             }
 
@@ -50,7 +50,7 @@ public class compManagementAssist {
     }
 
     public compManagementAssist(Company comp, CompaniesEmployees player) {
-        
+
         if (!player.getDuties().getPermission(4)) {
             guiMessage = Language.get("menus.compMngAssist.states.worker");
             solution = new Pair(0, null);

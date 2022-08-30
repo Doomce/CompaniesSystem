@@ -1,7 +1,7 @@
 package net.dom.companies.prompts;
 
 import net.dom.companies.Companies;
-import net.dom.companies.provisions.businessForms;
+import net.dom.companies.economy.Eco;
 import net.dom.companies.menus.compCreateMenu;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -16,8 +16,7 @@ public class accCreateContributionPrompt extends StringPrompt {
     private double minDeposit;
 
     public String getPromptText(ConversationContext Cc) {
-        minDeposit = businessForms.values()[(int) Cc.getSessionData("form")].getClassByName().initContribution();
-        return "Irasyk norimo inaso dydi (Min - "+minDeposit+"EUR): \n Noredami atsaukti, rasykite atsaukti arba palaukite.";
+        return "Irasyk norimo inaso dydi (Min - "+ Eco.INIT_CONTRIBUTION.cost()+"EUR): \n Noredami atsaukti, rasykite atsaukti arba palaukite.";
     }
 
     public Prompt acceptInput(ConversationContext Cc, String input) {
