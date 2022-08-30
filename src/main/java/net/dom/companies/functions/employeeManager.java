@@ -67,8 +67,8 @@ public class employeeManager {
             Transaction tx = session.beginTransaction();
             Company comp = session.get(Company.class, compId);
             CompaniesEmployees staff = isEmpWorkingInCompany(p, comp);
-            if (staff != null && (!staff.getDuties().equals(duty.OWNER))) {
-                p.sendMessage("Rangus gali kelti tik imoniu savininkai.");
+            if (staff != null && !staff.getDuties().getPermission(8)) {
+                p.sendMessage("Neturi teisės paaukštinti darbuotojų rangų.");
                 return;
             }
             if (staff == null && !isAdmin) {
@@ -119,8 +119,8 @@ public class employeeManager {
             Transaction tx = session.beginTransaction();
             Company comp = session.get(Company.class, compId);
             CompaniesEmployees staff = isEmpWorkingInCompany(p, comp);
-            if (staff != null && (!staff.getDuties().equals(duty.OWNER))) {
-                p.sendMessage("Rangus gali žeminti tik imoniu savininkai.");
+            if (staff != null && !staff.getDuties().getPermission(9)) {
+                p.sendMessage("Neturi teisės pažeminti darbuotojų rangų.");
                 return;
             }
             if (staff == null && !isAdmin) {
@@ -157,9 +157,8 @@ public class employeeManager {
             CompaniesEmployees employee =
                     session.load(CompaniesEmployees.class, new CompaniesEmployeesKeys(empUid, compId));
             CompaniesEmployees staff = isEmpWorkingInCompany(p, employee.getCompany());
-
-            if (staff != null && (!(staff.getDuties().equals(duty.OWNER) || staff.getDuties().equals(duty.CO_OWNER)))) {
-                p.sendMessage("Ismesti gali tik imoneje dirbantis savininkas ar pavaduotojas.");
+            if (staff != null && !staff.getDuties().getPermission(1)) {
+                p.sendMessage("Neturi teisės išmesti darbuotojų.");
                 return;
             }
             if (staff == null && !isAdmin) {
@@ -209,11 +208,13 @@ public class employeeManager {
 
             Session session = hibernateUtil.getSessionFactory().openSession();
             Company company = session.load(Company.class, compId);
+
             CompaniesEmployees staff = isEmpWorkingInCompany(p, company);
-            if (staff == null || !(staff.getDuties().equals(duty.CO_OWNER) || staff.getDuties().equals(duty.OWNER))) {
-                p.sendMessage("Priimti gali tik pavaduotojai ir direktoriai.");
+            if (staff != null && !staff.getDuties().getPermission(0)) {
+                p.sendMessage("Neturi teisės priimti darbuotojų.");
                 return;
             }
+
             Employee emp = session.load(Employee.class, target.getUniqueId());
             if (emp != null && emp.getCE().size() > maxCompaniesWorking) {
                 p.sendMessage("Žaidėjas nebegali papildomai dirbti....");
@@ -244,8 +245,15 @@ public class employeeManager {
             return;
         }
         Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
-
             Session session = hibernateUtil.getSessionFactory().openSession();
+
+            CompaniesEmployees compStaff =
+                    session.load(CompaniesEmployees.class, new CompaniesEmployeesKeys(((Player) p).getUniqueId(), compId));
+            if (!compStaff.getDuties().getPermission(2) && !isAdmin) {
+                ((Player) p).sendMessage("Neturi teisės keisti algų.");
+                return;
+            }
+
             CompaniesEmployees compEmp =
                     session.load(CompaniesEmployees.class, new CompaniesEmployeesKeys(targetUid, compId));
             if (compEmp == null) {

@@ -72,12 +72,14 @@ public class CompanyPanelMenu {
 
         gui.setItem(2, 2, new GuiItem(setupInfoItem(), event -> assist.action(player)));
         gui.setItem(2, 4, new GuiItem(setupEmpItem(), (event -> {
+            if (!employee.getDuties().getPermission(3)) return;
             companyManager.openCompanyEmpPanel(player, compId);
         })));
         gui.setItem(2, 6, new GuiItem(setupVaultItem(), (event -> {
             //TODO BANKAS;
         })));
         gui.setItem(2, 8, new GuiItem(setupLicItem(), (event -> {
+            if (!employee.getDuties().getPermission(5)) return;
             companyManager.openLicGui(player, compId);
         })));
         gui.setItem(3, 2, new GuiItem(setupWageItem(), (event -> {
@@ -155,7 +157,7 @@ public class CompanyPanelMenu {
 
         iMeta.setDisplayName(Language.get("menus.companyPanel.empItem.name"));
 
-        if (employee.getDuties().equals(duty.OWNER) || employee.getDuties().equals(duty.CO_OWNER)) {
+        if (employee.getDuties().getPermission(3)) {
             lore.addAll(Language.getList("menus.companyPanel.empItem.lore.ceo",
                     "{Total}", workers, "{Working}", isWorking));
         } else {

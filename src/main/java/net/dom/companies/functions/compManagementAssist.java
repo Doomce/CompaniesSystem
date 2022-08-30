@@ -30,8 +30,6 @@ public class compManagementAssist {
     private final String guiMessage;
     private final Pair solution;
 
-
-
     public void action(Player p) {
         Companies plugin = functionsHandler.comp;
         switch (solution.code) {
@@ -52,8 +50,8 @@ public class compManagementAssist {
     }
 
     public compManagementAssist(Company comp, CompaniesEmployees player) {
-
-        if (!player.getDuties().equals(duty.OWNER)) {
+        
+        if (!player.getDuties().getPermission(4)) {
             guiMessage = Language.get("menus.compMngAssist.states.worker");
             solution = new Pair(0, null);
             return;

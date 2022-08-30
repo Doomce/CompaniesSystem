@@ -1,6 +1,8 @@
 package net.dom.companies.licences;
 
 import net.dom.companies.Companies;
+import net.dom.companies.database.CompaniesEmployees;
+import net.dom.companies.database.CompaniesEmployeesKeys;
 import net.dom.companies.database.Company;
 import net.dom.companies.database.hibernateUtil;
 import net.dom.companies.menus.compLicMenu;
@@ -174,6 +176,13 @@ public class LicHandler {
             List<Licence.Properties> compLicences = manageLicencesForComp(company);
             Licence.Properties selectedLic = compLicences.stream().filter((lic) -> lic.id == licId).findAny().get();
 
+            CompaniesEmployees compEmp =
+                    session.load(CompaniesEmployees.class, new CompaniesEmployeesKeys(p.getUniqueId(), compId));
+            if (!compEmp.getDuties().getPermission(6)) {
+                p.sendMessage("Neturi teisės pardavinėti licencijų.");
+                return;
+            }
+
             if (!selectedLic.isOwned) {
                 p.sendMessage("Neturi sios licencijos.");
                 return;
@@ -198,9 +207,15 @@ public class LicHandler {
             Session session = hibernateUtil.getSessionFactory().openSession();
             Company company = session.load(Company.class, compId);
 
+            CompaniesEmployees compEmp =
+                    session.load(CompaniesEmployees.class, new CompaniesEmployeesKeys(p.getUniqueId(), compId));
+            if (!compEmp.getDuties().getPermission(7)) {
+                p.sendMessage("Neturi teisės pirkti licencijų.");
+                return;
+            }
+
             List<Licence.Properties> compLicences = manageLicencesForComp(company);
             Licence.Properties selectedLic = compLicences.stream().filter((lic) -> lic.id == licId).findAny().get();
-
             if (selectedLic.isOwned) {
                 p.sendMessage("Jau turi šią licenciją.");
                 return;

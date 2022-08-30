@@ -23,15 +23,17 @@ public class CompaniesEmployees {
     private Company company;
 
     @Column(name = "salary")
-    Double salary;
+    private Double salary;
 
     @Column(name = "duties")
     @Enumerated(EnumType.STRING)
-    duty duties;
+    private duty duties;
 
     @Column(name = "started_work")
-    LocalDate workingFrom;
+    private LocalDate workingFrom;
 
+    @Column(name = "is_shareholder")
+    private boolean isShareholder;
 
     public CompaniesEmployeesKeys getId() {
         return id;
@@ -79,5 +81,13 @@ public class CompaniesEmployees {
 
     public void setWorkingFrom(LocalDate workingFrom) {
         this.workingFrom = workingFrom;
+    }
+
+    public boolean isShareholder() {
+        return isShareholder;
+    }
+
+    public void setShareholder(boolean shareholder) {
+        isShareholder = shareholder;
     }
 }
