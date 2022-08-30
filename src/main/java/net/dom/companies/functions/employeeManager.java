@@ -2,6 +2,7 @@ package net.dom.companies.functions;
 
 import net.dom.companies.Companies;
 import net.dom.companies.database.*;
+import net.dom.companies.economy.Eco;
 import net.dom.companies.objects.duty;
 import net.dom.companies.prompts.EmpInvitationPrompt;
 import net.dom.companies.prompts.EmpSalaryPrompt;
@@ -28,7 +29,6 @@ public class employeeManager {
     }
 
     private static Companies comp;
-    private final double minWage = 300.00;
 
     public employeeManager(Companies plugin) {
         comp = plugin;
@@ -240,8 +240,7 @@ public class employeeManager {
         if (((Player) p).getUniqueId().equals(targetUid)) {
             return;
         }
-        if ((minWage>wage && wage != 0) && !isAdmin) {
-
+        if ((Eco.MIN_WAGE.cost()>wage && wage != 0) && !isAdmin) {
             return;
         }
         Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {

@@ -63,21 +63,6 @@ public class companyManager {
         });
     }
 
-
-    public static void invTest(Player p) throws IOException {
-        String ss = ItemSerialization.itemStackArrayToBase64(p.getInventory().getContents());
-
-        Inventory gui = Bukkit.createInventory(null, 54);
-
-        p.sendMessage(ItemSerialization.itemStackArrayFromBase64(ss).length+"");
-        for (ItemStack IS : ItemSerialization.itemStackArrayFromBase64(ss)) {
-            if (IS == null) continue;
-            gui.addItem(IS);
-        }
-
-        p.openInventory(gui);
-    }
-
     public static void openLicGui(Player p, Long compId) {
         Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
             Session session = hibernateUtil.getSessionFactory().openSession();

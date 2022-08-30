@@ -56,14 +56,12 @@ public class compManagementAssist {
         if (!player.getDuties().equals(duty.OWNER)) {
             guiMessage = Language.get("menus.compMngAssist.states.worker");
             solution = new Pair(0, null);
-            //solution.put(0, null);
             return;
         }
 
         if (comp.getTag() == null || comp.getTag().isEmpty()) {
             guiMessage = Language.get("menus.compMngAssist.states.noTag");
             solution = new Pair(2, comp);
-            //solution.put(2, comp);
             return;
         }
 
@@ -73,14 +71,12 @@ public class compManagementAssist {
         for (CompaniesEmployees employee : comp.getCE()) {
             if ((employee.getSalary() == null || player.getSalary() < 300) && !employee.getDuties().equals(duty.OWNER)) {
                 guiMessage = Language.get("menus.compMngAssist.states.check_salary");
-                //solution.put(1, employee);
                 solution = new Pair(1, employee);
                 return;
             }
         }
 
         guiMessage = Language.get("menus.compMngAssist.states.ok");
-        //solution.put(0, null);
         solution = new Pair(0, null);
     }
 

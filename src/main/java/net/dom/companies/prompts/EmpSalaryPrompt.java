@@ -1,6 +1,7 @@
 package net.dom.companies.prompts;
 
 import net.dom.companies.Companies;
+import net.dom.companies.economy.Eco;
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;
@@ -31,7 +32,7 @@ public class EmpSalaryPrompt extends NumericPrompt {
         String empName = Objects.requireNonNullElse(
                         Bukkit.getPlayer((UUID) context.getSessionData("empUid")).getName(),
                         "darbuotojui");
-        return "Įvesk "+empName+" skiriamą algą. Minimali dienos alga: 300e. \n" +
+        return "Įvesk "+empName+" skiriamą algą. Minimali dienos alga: "+ Eco.MIN_WAGE.cost() +"e. \n" +
                 "Jei darbuotojas nedirba, įvesk 0.";
     }
 }
