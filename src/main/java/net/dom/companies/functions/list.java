@@ -42,6 +42,10 @@ public class list {
                 compList.addAll(session.createQuery(criteriaQuery).setCacheable(false).getResultList());
             } else {
                 Employee emp = session.get(Employee.class, p.getUniqueId());
+                if (emp == null) {
+                    p.sendMessage("Nesi registruotas tarp projekto darbuotojų.");
+                    return;
+                }
                 if (emp.getCE().size() > compLimit) allowCreate = false;
                 if (!p.hasPermission("companies.create")) allowCreate = false;
                 for (CompaniesEmployees compEmp : emp.getCE()) {

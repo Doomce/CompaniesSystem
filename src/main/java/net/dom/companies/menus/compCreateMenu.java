@@ -96,27 +96,12 @@ public class compCreateMenu {
         gui.addItem(new GuiItem(Material.AIR));
         gui.addItem(new GuiItem(commitItem(data), (event -> {
             gui.close(p);
-            Companies.getInstance().getDb().createCompany(p.getUniqueId(), finalData);
+            Companies.getInstance().compMng().createCompany(p.getUniqueId(), finalData);
         })));
     }
 
     public void open() {
         gui.open(player);
-    }
-
-    private static ItemStack formItem(int selected) {
-        ItemStack item = new ItemStack(Material.BRICK);
-        List<String> lore = new ArrayList<>();
-
-        lore.add(ChatColor.GRAY+"- Individuali įmonė");
-        lore.add(ChatColor.GRAY+"- Uždaroji akcinė bendrovė");
-        lore.set(selected, ChatColor.YELLOW+ChatColor.stripColor(lore.get(selected)));
-
-        ItemMeta iMeta = item.getItemMeta();
-        iMeta.setDisplayName(ChatColor.YELLOW+"Verslo valdymo forma: UAB");
-        iMeta.setLore(lore);
-        item.setItemMeta(iMeta);
-        return item;
     }
 
     private static ItemStack contributionItem(int selected, double amount) {

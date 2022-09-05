@@ -84,31 +84,7 @@ implements CommandExecutor {
             } else {
                 if (sender instanceof Player) {
                     Player p = (Player)sender;
-
                     comp.getFH().getCList().runPlayer(p);
-
-                    /*Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
-                        Session session  = hibernateUtil.getSessionFactory().openSession();
-
-                        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-                        CriteriaQuery<company> criteriaQuery = criteriaBuilder.createQuery(company.class);
-                        Root<employee> root = criteriaQuery.from(employee.class);
-                        criteriaQuery.select(root.get("company"));
-                        criteriaQuery.where(criteriaBuilder.equal(root.get("uuid"), p.getUniqueId()));
-                        List<company> results = session.createQuery(criteriaQuery).setCacheable(false).getResultList();
-
-                        results.forEach((c) -> {
-                            p.sendMessage("comp: "+c.getName()+", "+c.getBusinessForm());
-                            p.sendMessage("scope: "+c.getScope()+";");
-                            p.sendMessage("emps: ");
-                            c.getEmployees().forEach((employee -> {
-                                p.sendMessage("name: "+Bukkit.getPlayer(employee.getUuid())+", "+employee.getDuties());
-                                p.sendMessage("salary: "+employee.getSalary());
-                            }));
-                        });
-                        session.close();
-                    });*/
-
                     return true;
                 }
                 return false;

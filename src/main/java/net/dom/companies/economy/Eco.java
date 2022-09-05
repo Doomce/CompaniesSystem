@@ -12,12 +12,15 @@ public enum Eco {
 
 
     final double sum;
+
+    double inflation = 1.00;
+
     Eco(double cost) {
         this.sum = cost;
     }
 
     public double cost() {
-        return sum;
+        return sum*inflation;
     }
 
 }
