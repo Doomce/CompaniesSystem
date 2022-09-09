@@ -1,11 +1,14 @@
 package net.dom.companies.lang;
 
+import net.dom.companies.database.hibernateUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.sf.ehcache.hibernate.HibernateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.hibernate.Session;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class ColorUtil {
      */
     public static String legacyToJson(String legacyString) {
         if (legacyString == null) return "";
+        String s = "UPDATE 'gangs' SET 'Active' = 1 WHERE `lyderis` = ? ";
         return ComponentSerializer.toString(TextComponent.fromLegacyText(legacyString));
     }
 
