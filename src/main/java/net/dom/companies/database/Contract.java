@@ -1,7 +1,5 @@
 package net.dom.companies.database;
 
-import net.dom.companies.objects.duty;
-import org.bukkit.Location;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,9 +8,6 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -43,9 +38,6 @@ public class Contract implements Serializable {
 
     @Column(name = "state")
     private int state;//state: waiting signature, in progress, waiting money, completed, not done, rejected.
-
-    @Column(name = "bank_iban")
-    Long bankIban;
 
     @Column(name = "init_contribution", precision = 10, scale = 2)
     Double initContribution;
@@ -116,14 +108,6 @@ public class Contract implements Serializable {
 
     public void setState(int state) {
         this.state = state;
-    }
-
-    public Long getBankIban() {
-        return bankIban;
-    }
-
-    public void setBankIban(Long bankIban) {
-        this.bankIban = bankIban;
     }
 
     public Double getInitContribution() {

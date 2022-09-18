@@ -59,7 +59,6 @@ implements CommandExecutor {
 
                         sender.sendMessage("Informacija: [ID:"+comp.getCompId()+"] [Pav:"+comp.getName()+"]");
                         sender.sendMessage("--- Fondas: "+comp.getBankIban()+"; Jei NULL- Nėra;");
-                        sender.sendMessage("--- Forma: UAB");
                         sender.sendMessage("--- Įkurta: "+comp.getCreationDate());
                         sender.sendMessage("--- Darb skaičius: "+comp.getCE().size());
                         comp.getCE().forEach((employees -> {

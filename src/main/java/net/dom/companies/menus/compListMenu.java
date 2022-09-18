@@ -4,6 +4,7 @@ import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
 import dev.triumphteam.gui.guis.PaginatedGui;
+import net.dom.companies.database.CompaniesEmployees;
 import net.dom.companies.database.Company;
 import net.dom.companies.functions.companyManager;
 import net.dom.companies.functions.menuFunctions;
@@ -30,22 +31,15 @@ public class compListMenu {
             .create();
     protected Player player;
 
-    public compListMenu(Player p, List<Company> companies, List<duty> duties, boolean allowCreate) {
+    public compListMenu(Player p, List<CompaniesEmployees> compPlaces, boolean allowCreate) {
         this.player = p;
 
-        for (int i = 0; i < companies.size(); i++) {
-            Company comp = companies.get(i);
-            gui.addItem(new GuiItem(compItem(comp, duties.get(i)),
-                    (event -> menuFunctions.openCompanyMenu(p, comp.getCompId()))));
+        for (CompaniesEmployees emp : compPlaces) {
+            gui.addItem(new GuiItem(compItem(emp, emp.getCompany().getName()),
+                    (event -> menuFunctions.openCompanyMenu(p, emp.getCompany().getCompId()))));
         }
 
-        gui.setItem(3, 2, ItemBuilder.from(Material.PAPER)
-                .name(Component.text("Praeitas puslapis").decorate(TextDecoration.BOLD).color(TextColor.fromHexString("#2874A6")))
-                .asGuiItem(event -> gui.previous()));
-
-        gui.setItem(3, 8, ItemBuilder.from(Material.PAPER)
-                .name(Component.text("Kitas puslapis").decorate(TextDecoration.BOLD).color(TextColor.fromHexString("#B03A2E")))
-                .asGuiItem(event -> gui.next()));
+        setup();
 
         if (allowCreate) {
             gui.setItem(3, 5, ItemBuilder.from(Material.BRICKS)
@@ -54,32 +48,58 @@ public class compListMenu {
         }
     }
 
+    public compListMenu(Player p, List<Company> companies) {
+        this.player = p;
+
+        for (Company company : companies) {
+            gui.addItem(new GuiItem(compItem(null, company.getName()),
+                    (event -> menuFunctions.openCompanyMenu(p, company.getCompId()))));
+        }
+
+        setup();
+    }
+
+    private void setup() {
+        gui.setItem(3, 2, ItemBuilder.from(Material.PAPER)
+                .name(Component.text("Praeitas puslapis").decorate(TextDecoration.BOLD).color(TextColor.fromHexString("#2874A6")))
+                .asGuiItem(event -> gui.previous()));
+
+        gui.setItem(3, 8, ItemBuilder.from(Material.PAPER)
+                .name(Component.text("Kitas puslapis").decorate(TextDecoration.BOLD).color(TextColor.fromHexString("#B03A2E")))
+                .asGuiItem(event -> gui.next()));
+    }
+
     public void open() {
         gui.open(player);
     }
 
-    private ItemStack compItem(Company var2, duty var3) {
+    private ItemStack compItem(CompaniesEmployees employee, String compName) {
         ItemStack item = new ItemStack(Material.PAPER);
         ItemMeta iMeta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY+"Šioje įmonėje esate:");
+        if (employee != null) {
+            lore.add(ChatColor.GRAY + "Šioje įmonėje esate:");
 
-        switch (var3) {
-            case OWNER: {
-                lore.add(ChatColor.GRAY+"Savininkas");
-                break;
+            switch (employee.getDuties()) {
+                case OWNER: {
+                    lore.add(ChatColor.GRAY + "Savininkas");
+                    break;
+                }
+                case WORKER: {
+                    lore.add(ChatColor.GRAY + "Darbuotojas");
+                    break;
+                }
+                case CO_OWNER: {
+                    lore.add(ChatColor.GRAY + "Direktoriaus pavaduotojas");
+                    break;
+                }
             }
-            case WORKER: {
-                lore.add(ChatColor.GRAY+"Darbuotojas");
-                break;
-            }
-            case CO_OWNER: {
-                lore.add(ChatColor.GRAY+"Direktoriaus pavaduotojas");
-                break;
-            }
+
+            if (employee.isShareholder()) lore.add(ChatColor.GRAY + "(AKCININKAS)");
+
         }
 
-        iMeta.setDisplayName(ChatColor.YELLOW+""+ChatColor.BOLD+""+var2.getName());
+        iMeta.setDisplayName(ChatColor.YELLOW+""+ChatColor.BOLD+""+compName);
         iMeta.setLore(lore);
         item.setItemMeta(iMeta);
         return item;

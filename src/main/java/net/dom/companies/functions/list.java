@@ -16,6 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class list {
 
@@ -29,8 +30,7 @@ public class list {
     private void openGui(Player p, int compLimit, boolean isAdmin) {
 
         Bukkit.getScheduler().runTaskAsynchronously(comp, () -> {
-            List<Company> compList = new ArrayList<>();
-            List<duty> empDuties = new ArrayList<>();
+            compListMenu cList;
             boolean allowCreate = true;
             Session session = hibernateUtil.getSessionFactory().openSession();
 
@@ -39,7 +39,7 @@ public class list {
                 CriteriaQuery<Company> criteriaQuery = criteriaBuilder.createQuery(Company.class);
                 Root<Company> root = criteriaQuery.from(Company.class);
                 criteriaQuery.select(root);
-                compList.addAll(session.createQuery(criteriaQuery).setCacheable(false).getResultList());
+                cList = new compListMenu(p, session.createQuery(criteriaQuery).setCacheable(false).getResultList());
             } else {
                 Employee emp = session.get(Employee.class, p.getUniqueId());
                 if (emp == null) {
@@ -48,14 +48,9 @@ public class list {
                 }
                 if (emp.getCE().size() > compLimit) allowCreate = false;
                 if (!p.hasPermission("companies.create")) allowCreate = false;
-                for (CompaniesEmployees compEmp : emp.getCE()) {
-                    compList.add(compEmp.getCompany());
-                    empDuties.add(compEmp.getDuties());
-                }
+                cList = new compListMenu(p, new ArrayList<>(emp.getCE()), allowCreate);
 
             }
-
-            compListMenu cList = new compListMenu(p, compList, empDuties, allowCreate);
             Bukkit.getScheduler().runTask(comp, cList::open);
 
             session.close();

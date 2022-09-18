@@ -40,7 +40,6 @@ public class Company implements Serializable {
 
     @Column(name = "licences")
     @Convert(converter = licenceConverter.class)
-    //Set<Integer> licences;
     List<Integer> licences;
 
     @Column(name = "home_loc")
