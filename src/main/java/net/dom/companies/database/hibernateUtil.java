@@ -40,7 +40,7 @@ public class hibernateUtil {
                 settings.put(Environment.CACHE_REGION_FACTORY, SingletonEhcacheRegionFactory.class.getName());
                 settings.put(Environment.USE_SECOND_LEVEL_CACHE, true);
                 settings.put(Environment.USE_QUERY_CACHE, true);
-                settings.put(Environment.GENERATE_STATISTICS, true);
+                //settings.put(Environment.GENERATE_STATISTICS, true);
                 settings.put(Environment.CACHE_PROVIDER_CONFIG, "/ehcache.xml");
                 section = section.getConfigurationSection("properties");
                 if (section == null) {

@@ -24,7 +24,6 @@ public final class Companies extends JavaPlugin {
     private functionsHandler fH;
     private Language lang;
 
-
     @Override
     public void onEnable() {
         // Plugin startup logic
