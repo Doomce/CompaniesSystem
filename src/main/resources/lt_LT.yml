@@ -35,6 +35,34 @@ menus:
         worker:
           section: "<#354f52>&l&m                          "
           element: "<center:55><#cad2c5>{Name} {Color} ({State})"
+    wageItem:
+      name: "  <#84a98c>&lDARBO UŽMOKESTIS"
+      lore:
+        ceo:
+          - "<#52796f>&l&m                          "
+          - "  <#cad2c5>Atskaitoma suma: {wagesum}"
+          - "  <#cad2c5>PSD: {psd}"
+          - "  <#cad2c5>GPM: {gpm}"
+          - "  <#cad2c5>Algų suma: {total}"
+          - "<#52796f>&l&m                          "
+          - "<#cad2c5> Kairysis pelės klavišas:"
+          - "<#84a98c> ≡   Darbuotojų valdymas"
+          - "<#52796f>&l&m                          "
+        worker:
+          - "<#52796f>&l&m                          "
+          - "+  <#cad2c5>Priskaityta: {neto}"
+          - "-  <#cad2c5>PSD: {psd}"
+          - "-  <#cad2c5>GPM: {gpm}"
+          - "<#52796f>&l&m                          "
+          - "-> <#cad2c5>Jūsų alga (BRUTO): {bruto}"
+          - "Bus išmokama po: {date}."
+    vaultItem:
+      name: "   <#84a98c>&lĮMONĖS KAPITALAS"
+      lore:
+        - "<#52796f>&l&m                          "
+        - "<center:44><#cad2c5>Balansas: {money} EUR"
+        - "<center:44><#cad2c5>Įstatas: {init} EUR"
+        - "<#52796f>&l&m                          "
   workersMenu:
     name: "<#84A98C>&l<center:63>{Name} {Color}({State})"
     lore:

@@ -58,6 +58,34 @@ public class employeeManager {
         return false;
     }
 
+    public Double[] getWage(UUID uid, Long compId) {
+        Session session = hibernateUtil.getSessionFactory().openSession();
+        CompaniesEmployees emp =
+                session.load(CompaniesEmployees.class, new CompaniesEmployeesKeys(uid, compId));
+        return Eco.calcWageTax(emp.getSalary());
+    }
+
+    public void payOutWages(Long compId) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            Session session = hibernateUtil.getSessionFactory().openSession();
+            Transaction tx = session.beginTransaction();
+            Company comp = session.load(Company.class, compId);
+
+            if (comp.getBalance() < plugin.compMng().calcWage(compId)[0]) {
+                return;
+            }
+
+            for (CompaniesEmployees emp : comp.getCE()) {
+                Double[] wageData = Eco.calcWageTax(emp.getSalary());
+                comp.setBalance(comp.getBalance() - wageData[0]);
+                //Add to player: (wageData[0]-wageData[1]-wageData[2])
+                //send to player notification
+                //edit stats;
+            }
+
+        });
+    }
+
     public void promote(Player p, Long compId, CompaniesEmployees employee, boolean isAdmin) {
         if (!p.hasPermission("companies.promote")) return;
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {

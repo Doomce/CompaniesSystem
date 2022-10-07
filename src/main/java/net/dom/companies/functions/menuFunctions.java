@@ -103,4 +103,8 @@ public class menuFunctions {
                 .withLocalEcho(false).buildConversation(p).begin();
     }
 
+    public static void payout(Long id) {
+        plugin.getFH().getEmpMng().payOutWages(id);
+    }
+
 }

@@ -46,8 +46,8 @@ public class Company implements Serializable {
     @Convert(converter = locationConverter.class)
     Location loc;
 
-    @Column(name = "bank_iban")
-    Long bankIban;
+    @Column(name = "balance")
+    Double balance;
 
     @Column(name = "init_contribution", precision = 10, scale = 2)
     Double initContribution;
@@ -103,12 +103,20 @@ public class Company implements Serializable {
         this.tag = tag;
     }
 
-    public Long getBankIban() {
+    /*public Long getBankIban() {
         return bankIban;
     }
 
     public void setBankIban(Long bankIban) {
         this.bankIban = bankIban;
+    }*/
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public Timestamp getCreationDate() {

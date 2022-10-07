@@ -8,6 +8,7 @@ import net.dom.companies.Companies;
 import net.dom.companies.database.CompaniesEmployees;
 import net.dom.companies.database.Company;
 import net.dom.companies.functions.compManagementAssist;
+import net.dom.companies.functions.employeeManager;
 import net.dom.companies.functions.menuFunctions;
 import net.dom.companies.lang.Language;
 import net.dom.companies.objects.duty;
@@ -23,6 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 /*
 Comp State errors for assist:
@@ -72,14 +74,14 @@ public class CompanyPanelMenu {
             menuFunctions.openCompanyEmpMenu(player, compId);
         })));
         gui.setItem(2, 6, new GuiItem(setupVaultItem(), (event -> {
-            //TODO BANKAS;
+            player.sendMessage(ChatColor.RED+" Banko veiksmai atliekami tik įmonių priežiūros tarnyboje!");
         })));
         gui.setItem(2, 8, new GuiItem(setupLicItem(), (event -> {
             if (!employee.getDuties().getPermission(5)) return;
             menuFunctions.openLicMenu(player, compId);
         })));
         gui.setItem(3, 2, new GuiItem(setupWageItem(), (event -> {
-            //TODO PAYOUT SALARY BUTTONS
+            menuFunctions.payout(compId);
         })));
         //TODO KONTRAKTAI
         //TODO MOKESČIAI
@@ -179,17 +181,9 @@ public class CompanyPanelMenu {
         ItemStack vaultItem = new ItemStack(Material.PAPER);
         ItemMeta iMeta = vaultItem.getItemMeta();
         List<String> lore = new ArrayList<>();
-
-        iMeta.setDisplayName(ChatColor.YELLOW+
-                StringUtils.center("Įmonės kapitalas", 34));
-        lore.add("--------------------------------------");
-        lore.add("Įstatinis kapitalas: "+comp.getInitContribution());
-        lore.add("Banko sąskaitos balansas: ");
-        lore.add("Daiktų įmonės saugykloje: ");
-        lore.add("--------------------------------------");
-        //TODO BASE64 VAULT
-        //TODO BANK API
-
+        iMeta.setDisplayName(Language.get("menus.companyPanel.vaultItem.name"));
+        lore.addAll(Language.getList("menus.companyPanel.vaultItem.lore",
+                "{money}", comp.getBalance(), "{init}", comp.getInitContribution()));
         iMeta.setLore(lore);
         vaultItem.setItemMeta(iMeta);
         return vaultItem;
@@ -215,25 +209,12 @@ public class CompanyPanelMenu {
         ItemMeta iMeta = wagesItem.getItemMeta();
         List<String> lore = new ArrayList<>();
 
-        int wageEmployees = 0;
-        double totalWages = 0;
-        double tax = 0;
-        for (CompaniesEmployees emp : comp.getCE()) {
-            if (emp.getSalary() != null) {
-                totalWages += emp.getSalary();
-                tax += emp.getSalary()*0.1;
-                wageEmployees++;
-            }
-        }
+        Double[] wageData = Companies.getInstance().compMng().calcWage(compId);
 
-        iMeta.setDisplayName(ChatColor.YELLOW+
-                StringUtils.center("Buhalterija", 34));
-        lore.add("--------------------------------------");
-        lore.add("Bendra algų suma: "+totalWages);
-        lore.add("Mokesčiai: "+tax);
-        lore.add("Išmokama "+wageEmployees+" darbuotojams.");
-        lore.add("Automatiškas algų išmokėjimas po "); //TODO SETUP WAGE TIMER
-        lore.add("--------------------------------------");
+        iMeta.setDisplayName(Language.get("menus.companyPanel.wageItem.name"));
+        lore.addAll(Language.getList("menus.companyPanel.wageItem.lore.ceo",
+                "{wagesum}", wageData[0], "{gpm}", wageData[1], "{psd}", wageData[2],
+                "{total}", wageData[0] - wageData[1] - wageData[2]));
 
         iMeta.setLore(lore);
         wagesItem.setItemMeta(iMeta);
@@ -244,13 +225,11 @@ public class CompanyPanelMenu {
         ItemStack wagesItem = new ItemStack(Material.PAPER);
         ItemMeta iMeta = wagesItem.getItemMeta();
         List<String> lore = new ArrayList<>();
-
-        iMeta.setDisplayName(ChatColor.YELLOW+
-                StringUtils.center("Darbo užmokestis", 34));
-        lore.add("--------------------------------------");
-        lore.add("Jūsų alga: "+employee.getSalary());
-        lore.add("Algos išmokėjimas: "); //TODO SETUP WAGE TIMER
-        lore.add("--------------------------------------");
+        Double[] wageData = Companies.getInstance().getFH().getEmpMng().getWage(employee.getId().getEmployeeId(), compId);
+        iMeta.setDisplayName(Language.get("menus.companyPanel.wageItem.name"));
+        lore.addAll(Language.getList("menus.companyPanel.wageItem.lore.ceo",
+                "{neto}", wageData[0], "{gpm}", wageData[1], "{psd}", wageData[2],
+                "{bruto}", wageData[0] - wageData[1] - wageData[2]));
 
         iMeta.setLore(lore);
         wagesItem.setItemMeta(iMeta);
