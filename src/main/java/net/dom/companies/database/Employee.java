@@ -6,7 +6,10 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "comp_employees")
@@ -22,20 +25,20 @@ public class Employee implements Serializable {
     private Set<CompaniesEmployees> employees = new HashSet<>();
 
     @Column(name = "wage_sum")
-    private double allWages = 0.0; //TODO Algu suma (visu laiku)
+    private double allWages; //TODO Algu suma (visu laiku)
 
     @Column(name = "taxes_paid")
-    private double taxesPaid = 0.0; //TODO GPM imokos
+    private double taxesPaid; //TODO GPM imokos
 
     @Column(name = "insurance_paid")
-    private double insurancePaid = 0.0; //TODO Sveikatos draudimo imokos
+    private double insurancePaid; //TODO Sveikatos draudimo imokos
 
     @Column(name = "support_got")
-    private double gotSupport = 0.0; //TODO Pasalpa
+    private double gotSupport; //TODO Pasalpa
 
     @Column(name = "debt")
     @Convert(converter = debtConverter.class)
-    private List<Double> debt = Collections.emptyList(); //TODO skolos/permokos
+    private List<Double> debt; //TODO skolos/permokos
 
     @Column(name = "stats")
     private String stats; //TODO: JSON
